@@ -5,8 +5,9 @@
 
 #KRT 14/06/2012 modified Start Screen and Game Over screen to cope with mouse events
 #KRT 14/06/2012 Added a non-busy wait to Game Over screen to reduce processor loading from near 100%
-import random, pygame, sys
+import random, pygame, sys, funcs
 from pygame.locals import *
+from funcs import *
 
 FPS = 10
 WINDOWWIDTH = 800
@@ -61,21 +62,21 @@ def runGame(frames):
                   {'x': startx - 2, 'y': starty}]
               
     #walls the snake will have to avoid.    
-    wallCoords = [getRandomLocation(), 
-                  getRandomLocation(),
-                  getRandomLocation(), 
-                  getRandomLocation(),
-                  getRandomLocation(), 
-                  getRandomLocation(),
-                  getRandomLocation(),
-                  getRandomLocation(),
-                  getRandomLocation(), 
-                  getRandomLocation() ]
+    wallCoords = [getRandomLocation(CELLWIDTH, CELLHEIGHT), 
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT),
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT), 
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT),
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT), 
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT),
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT),
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT),
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT), 
+                  getRandomLocation(CELLWIDTH, CELLHEIGHT) ]
                   
     direction = RIGHT
 
     # Start the apple in a random place.
-    apple = getRandomLocation()
+    apple = getRandomLocation(CELLWIDTH, CELLHEIGHT)
 
     while True: # main game loop
         for event in pygame.event.get(): # event handling loop
@@ -113,7 +114,7 @@ def runGame(frames):
             # check if worm has eaten an apply
             if wormCoords[HEAD]['x'] == apple['x'] and wormCoords[HEAD]['y'] == apple['y']:
                 # don't remove worm's tail segment
-                apple = getRandomLocation() # set a new apple somewhere
+                apple = getRandomLocation(CELLWIDTH, CELLHEIGHT) # set a new apple somewhere
                 FPS = FPS + 1 # INCREASE THE SPEED
             else:
                 del wormCoords[-1] # remove worm's tail segment
@@ -206,16 +207,6 @@ def showStartScreen():
         FPSCLOCK.tick(30)
         degrees1 += 3 # rotate by 3 degrees each frame
         degrees2 += 7 # rotate by 7 degrees each frame
-
-
-def terminate():
-    pygame.quit()
-    sys.exit()
-
-
-def getRandomLocation():
-    return {'x': random.randint(0, CELLWIDTH - 1), 'y': random.randint(0, CELLHEIGHT - 1)}
-
 
 def showGameOverScreen():
     gameOverFont = pygame.font.Font('freesansbold.ttf', 150)
