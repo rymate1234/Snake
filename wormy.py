@@ -107,17 +107,20 @@ def runGame(frames):
             for wormBody in wormCoords[1:]:
                 if wormBody['x'] == wormCoords[HEAD]['x'] and wormBody['y'] == wormCoords[HEAD]['y']:
                     return # game over
-            for wall in wallCoords[1:]:
+            for wall in wallCoords[0:]:
                 if wall['x'] == wormCoords[HEAD]['x'] and wall['y'] == wormCoords[HEAD]['y']:
                     return # game over
 
             # check if worm has eaten an apply
             if wormCoords[HEAD]['x'] == apple['x'] and wormCoords[HEAD]['y'] == apple['y']:
                 # don't remove worm's tail segment
+                score = len(wormCoords) - 3
+                if score % 2 == 0:
+                    FPS = FPS + 1 # INCREASE THE SPEED
                 apple = getRandomLocation(CELLWIDTH, CELLHEIGHT) # set a new apple somewhere
-                FPS = FPS + 1 # INCREASE THE SPEED
             else:
                 del wormCoords[-1] # remove worm's tail segment
+                
 
             # move the worm by adding a segment in the direction it is moving
             if direction == UP:
@@ -155,7 +158,7 @@ def runGame(frames):
             
 
 def drawPressKeyMsg():
-    pressKeySurf = BASICFONT.render('Press a key to play.', True, DARKGRAY)
+    pressKeySurf = BASICFONT.render('Press enter to play.', True, WHITE)
     pressKeyRect = pressKeySurf.get_rect()
     pressKeyRect.topleft = (WINDOWWIDTH - 200, WINDOWHEIGHT - 30)
     DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
@@ -170,7 +173,7 @@ def checkForKeyPress():
         elif event.type == KEYDOWN:
             if event.key == K_ESCAPE:   #event is escape key
                 terminate()
-            else:
+            elif event.key == K_ENTER:
                 return event.key   #key found return with it
     # no quit or key events in queue so return None    
     return None
